@@ -1,0 +1,82 @@
+version: "2.0"
+services:
+
+  mysql:
+    image: mariadb:11.2.2
+    container_name: fake-psp-docker-mysql
+    volumes:
+      - ./mysql-data:/var/lib/mysql:cached
+      - ./docker-config/mysql:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=QNs4xxxt7LBFY6ymt6g2Ktgaf2BKnx
+      - MYSQL_USER=praxis
+      - MYSQL_PASSWORD=p88fNhGqabc4gNm9jBTgjFNVDPvSrk
+      - MYSQL_DATABASE=fake_psp_db
+    networks:
+      - fake-psp
+    ports:
+      - "3307:3306"
+
+  webserver:
+    image: nginx:alpine
+    container_name: fake-psp-docker-webserver
+    working_dir: /application
+    environment:
+      SYMFONY_ENV: ${SYMFONY_ENV}
+    volumes:
+      - ./application:/application:cached
+      - ./docker-config/nginx/nginx_local.conf:/etc/nginx/conf.d/default.conf
+#      - ./docker-config/nginx/nginx_staging.conf:/etc/nginx/conf.d/staging.conf
+#      - ./docker-config/nginx/nginx_prod.conf:/etc/nginx/conf.d/production.conf
+      - ./docker-config/etc/hosts:/etc/hosts
+    command: [nginx-debug, '-g', 'daemon off;']
+    networks:
+      - fake-psp
+    ports:
+      - "80:80"
+    links:
+      - php-fpm
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    build:
+      context: ./docker-config/php-fpm
+      args:
+        - xdebug=${XDEBUG}
+    container_name: fake-psp-docker-php-fpm
+    user: '1000:1000'
+    working_dir: /application
+    environment:
+      SYMFONY_ENV: ${SYMFONY_ENV}
+      XDEBUG: ${XDEBUG}
+      XDEBUG_HOST: ${XDEBUG_HOST}
+      PHP_TIMEZONE: ${PHP_TIMEZONE}
+      PHP_DISPLAY_ERRORS: ${PHP_DISPLAY_ERRORS}
+    volumes:
+      - ./application:/application:cached
+      - ./docker-config/php-fpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/98-overrides.ini
+      - ./docker-config/php-fpm/www-custom.conf:/usr/local/etc/php-fpm.d/www-custom.conf
+      - ./docker-config/etc/hosts:/etc/hosts
+      - ./cache:/var/www/.cache/
+    links:
+      - mysql
+      - redis
+    networks:
+      - fake-psp
+    ports:
+      - "9000:9000"
+
+  redis:
+    image: 'redis:alpine'
+    container_name: fake-psp-docker-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - fake-psp
+
+networks:
+  fake-psp:
+    driver: bridge
