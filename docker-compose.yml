@@ -3,7 +3,8 @@ services:
 
   mysql:
     image: mariadb:11.2.2
-    container_name: fake-psp-docker-mysql
+    container_name: test-psp-docker-mysql
+    restart: always
     volumes:
       - ./mysql-data:/var/lib/mysql:cached
       - ./docker-config/mysql:/etc/mysql/conf.d
@@ -13,13 +14,14 @@ services:
       - MYSQL_PASSWORD=p88fNhGqabc4gNm9jBTgjFNVDPvSrk
       - MYSQL_DATABASE=fake_psp_db
     networks:
-      - fake-psp
+      - test-psp
     ports:
       - "3307:3306"
 
   webserver:
     image: nginx:alpine
-    container_name: fake-psp-docker-webserver
+    container_name: test-psp-docker-webserver
+    restart: always
     working_dir: /application
     environment:
       SYMFONY_ENV: ${SYMFONY_ENV}
@@ -31,7 +33,7 @@ services:
       - ./docker-config/etc/hosts:/etc/hosts
     command: [nginx-debug, '-g', 'daemon off;']
     networks:
-      - fake-psp
+      - test-psp
     ports:
       - "80:80"
     links:
@@ -44,7 +46,8 @@ services:
       context: ./docker-config/php-fpm
       args:
         - xdebug=${XDEBUG}
-    container_name: fake-psp-docker-php-fpm
+    container_name: test-psp-docker-php-fpm
+    restart: always
     user: '1000:1000'
     working_dir: /application
     environment:
@@ -63,20 +66,21 @@ services:
       - mysql
       - redis
     networks:
-      - fake-psp
+      - test-psp
     ports:
       - "9000:9000"
 
   redis:
     image: 'redis:alpine'
-    container_name: fake-psp-docker-redis
+    restart: always
+    container_name: test-psp-docker-redis
     ports:
       - "6379:6379"
     volumes:
       - ./redis-data:/data
     networks:
-      - fake-psp
+      - test-psp
 
 networks:
-  fake-psp:
+  test-psp:
     driver: bridge
