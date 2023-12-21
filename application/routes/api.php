@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Controller;
-use App\Http\Middleware\Core\PspWhiteLabel;
+use App\Http\Middleware\Core\PspScenario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group([
-
+    'middleware' => [PspScenario::class]
 ], function () {
     Route::post('/', [Controller::class, 'index']);
 });

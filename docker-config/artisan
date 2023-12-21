@@ -1,2 +1,2 @@
 #!/bin/sh
-docker exec -it fake-psp-docker-php-fpm php artisan $*
+docker exec -it test-psp-docker-php-fpm php artisan $*
