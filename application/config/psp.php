@@ -24,9 +24,9 @@ return [
     */
 
     'default_settings' => [
-        'namespace' => 'App\\Services\\processors\\',
+        'namespace' => 'App\\Services\\Processors\\',
         'case' => [
-            'field_name' => 'currency',
+            'field_name' => 'amount',
             'amount' => [
                 '50' => 'sale',
                 '5000000' => 'sale',
@@ -49,7 +49,7 @@ return [
     |
     */
     'ExamplePsp' => [
-        'namespace' => 'App\\Services\\processors\\',
+        'namespace' => 'App\\Services\\Processors\\',
         'notification_url' => [
             'card' => 'https://praxis.com/card/',
             'wallet' => 'https://praxis.com/wallet/{XXX}/{YYY}',

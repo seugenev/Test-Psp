@@ -91,7 +91,7 @@ return [
                 'port' => env('PAPERTRAIL_PORT'),
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
-            'processors' => [PsrLogMessageProcessor::class],
+            'Processors' => [PsrLogMessageProcessor::class],
         ],
 
         'stderr' => [
@@ -102,7 +102,7 @@ return [
             'with' => [
                 'stream' => 'php://stderr',
             ],
-            'processors' => [PsrLogMessageProcessor::class],
+            'Processors' => [PsrLogMessageProcessor::class],
         ],
 
         'syslog' => [

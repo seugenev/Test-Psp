@@ -23,11 +23,11 @@ class TestPsp
      *   $pspName = TestPsp::detectProcessor();
      *   header('Test-Psp: ' . $pspName);
      *
-     * @param string $needle folder name of the processors location
+     * @param string $needle folder name of the Processors location
      * @return string
      * @throws Exception
      */
-    public static function detectProcessor(string $needle = 'processors'): string
+    public static function detectProcessor(string $needle = 'Processors'): string
     {
         $pspInitiator = '';
         $trace = debug_backtrace(self::$traceLimit);
