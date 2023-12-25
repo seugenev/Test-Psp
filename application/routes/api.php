@@ -20,6 +20,6 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'middleware' => [PspScenario::class]
 ], function () {
-    Route::post('/', [Controller::class, 'index']);
+    Route::post('{any}', [Controller::class, 'index'])->where('any', '.*');
 });
 
