@@ -7,7 +7,6 @@ use App\Services\Processor;
 use App\Structures\Dto\ResponseDto;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Http;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
